@@ -35,12 +35,18 @@ namespace Skanowanie_faktur
             a.SearchLocation = @"c:\games";
             a.SearchPrefix = @"scan";
 
+            
+
+
             var test = a.CreateFileList();
 
             foreach(var file in test)
             {
+                FileList.Add(file);
                 Console.WriteLine(file);
             }
+
+            DataContext = this;
         }
     }
 }
