@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="IronOcr" Version="2023.3.2" />
+    <PackageReference Include="IronOcr.Languages.Polish" Version="2020.11.2" />
   </ItemGroup>
 
 </Project>

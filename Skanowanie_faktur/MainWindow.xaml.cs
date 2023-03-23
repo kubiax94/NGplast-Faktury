@@ -13,7 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Services.FilesService;
+using Services.OCRService;
+using Skanowanie_faktur.ViewModel;
 
 namespace Skanowanie_faktur
 {
@@ -22,31 +25,14 @@ namespace Skanowanie_faktur
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<string> FileList { get; set; } 
+       
 
         public MainWindow()
         {
             InitializeComponent();
-
-            FileList = new ObservableCollection<string>();
-
-            var a = new FilesReaderService();
-
-            a.SearchLocation = @"c:\games";
-            a.SearchPrefix = @"scan";
+            DataContext = new MainViewModel();
 
             
-
-
-            var test = a.CreateFileList();
-
-            foreach(var file in test)
-            {
-                FileList.Add(file);
-                Console.WriteLine(file);
-            }
-
-            DataContext = this;
         }
     }
 }

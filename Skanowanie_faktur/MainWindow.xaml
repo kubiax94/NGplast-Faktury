@@ -6,23 +6,67 @@
         xmlns:local="clr-namespace:Skanowanie_faktur"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+<TabControl>
+            <TabItem Header="OCR">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <WrapPanel Grid.Row="0" Grid.ColumnSpan="2"  VerticalAlignment="Center">
+                    
+                    <Label Margin="0 0 5 0">Scieżka do plików:</Label>
+                    <TextBox Margin="0 0 5 0" 
+                             Text="{Binding FilePath}" 
+                             IsEnabled="True" 
+                             VerticalAlignment="Center"
+                             MinWidth="200"/>
+                    <Button  Content="Wybierz.." Height="20"/>
+                    
+                </WrapPanel>
 
-        <ListView ItemsSource="{Binding FileList}">
-            
-        </ListView>
+                <ScrollViewer Grid.Row="1">
+                    <StackPanel>
+                        <ListView ItemsSource="{Binding FileList}"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Ustawienia">
+
+            <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
+                    <Label Margin="0 0 5 0">Kryteria wszyukiwania:</Label>
+                    <TextBox Margin="0 0 5 0" 
+                     Text="{Binding SearchCriteria}" 
+                     IsEnabled="True" 
+                     VerticalAlignment="Center"
+                     MinWidth="200"/>
+                
+                    <Label Margin="0 0 5 0">Prefix plików: </Label>
+                    <TextBox Margin="0 0 5 0" 
+                     Text="{Binding SearchCriteria}" 
+                     IsEnabled="True" 
+                     VerticalAlignment="Center"
+                     MinWidth="200"/>
+            </WrapPanel>
+
+                <!--<Label Content="Pliki do zmiany" Grid.Row="1"/>
+               
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                    <Label Content="Nazwy faktur"/>
+                    <ListView ItemsSource="{Binding FileList}"/>
+                </StackPanel>-->
+        </TabItem>
+        </TabControl>
+
         
-    </Grid>
 </Window>
