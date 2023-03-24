@@ -43,21 +43,40 @@
 
         <TabItem Header="Ustawienia">
 
-            <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
-                    <Label Margin="0 0 5 0">Kryteria wszyukiwania:</Label>
-                    <TextBox Margin="0 0 5 0" 
-                     Text="{Binding SearchCriteria}" 
-                     IsEnabled="True" 
-                     VerticalAlignment="Center"
-                     MinWidth="200"/>
+            <Grid VerticalAlignment="Top">
                 
-                    <Label Margin="0 0 5 0">Prefix plików: </Label>
-                    <TextBox Margin="0 0 5 0" 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Label Grid.Column="0"  Margin="0 0 5 0">Kryteria wszyukiwania:</Label>
+
+                <TextBox Grid.Row="1" Grid.Column="0" Margin="0 0 5 0" 
                      Text="{Binding SearchCriteria}" 
                      IsEnabled="True" 
                      VerticalAlignment="Center"
                      MinWidth="200"/>
-            </WrapPanel>
+
+                <WrapPanel Grid.Row="0" Grid.Column="1">
+                    <Label  Margin="0 0 5 0">Prefix plików:</Label>
+                    <TextBox Margin="0 0 5 0"
+                     Text="{Binding FilePrefix}"
+                     IsEnabled="True"
+                     VerticalAlignment="Center"
+                     MinWidth="200"/>
+                </WrapPanel>
+
+                
+                
+            </Grid>
 
                 <!--<Label Content="Pliki do zmiany" Grid.Row="1"/>
                

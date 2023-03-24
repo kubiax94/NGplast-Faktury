@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft;
 
 namespace Services.FilesService
 {
     public class FilesReaderService
     {
-        List<string> formats = new List<string>();
 
         public string SearchPrefix { get; set; }
         public string SearchLocation { get; set; }
@@ -26,7 +26,6 @@ namespace Services.FilesService
         public IEnumerable<string> CreateFileList()
         {
             List<string> allFiles = Directory.GetFiles(SearchLocation, "*.*", SearchOption.TopDirectoryOnly).ToList();
-
             List<string> correctFiles = new List<string>();
 
             foreach (string file in allFiles)
@@ -42,13 +41,20 @@ namespace Services.FilesService
                         break;
                     }
                     correct = true;
+
                 }
 
                 if (correct)
                     correctFiles.Add(file);
 
             }
+
             return correctFiles;
-        } 
+        }
+        
+        //public IEnumerable<object> ImportContractors(string filePath, )
+        //{
+            
+        //}
     }
 }

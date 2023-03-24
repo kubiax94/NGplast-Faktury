@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,13 +73,13 @@ namespace Skanowanie_faktur.ViewModel
 
             var b = new InnvoiceOCR();
 
-            b.SearchForInnvoicesDetails(test);
+            b.SearchForInnvoicesDetails(new InnvoiceOCRInput(test));
+        }
 
-            //var testFile = test.ToList()[Random.Shared.Next(test.Count() - 1)];
+        public void OpenFileBrowser()
+        {
+            var a = new OpenFileDialog();
 
-            //Console.WriteLine($"Test File is: {testFile}");
-
-            //b.SearchForInnvoicesDetailsTEST(testFile);
         }
 
     }
