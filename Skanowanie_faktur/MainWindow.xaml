@@ -34,7 +34,7 @@
 
                 <ScrollViewer Grid.Row="1">
                     <StackPanel>
-                        <ListView ItemsSource="{Binding FileList}"/>
+                        <DataGrid ItemsSource="{Binding FileList}"/>
                     </StackPanel>
                 </ScrollViewer>
 

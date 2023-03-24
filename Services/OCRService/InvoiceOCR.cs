@@ -58,11 +58,9 @@ namespace Services.OCRService
                             
 
                         if(file.Value.Found)
-                        {
-                            Console.WriteLine(file.Value.ToString());
                             break;
-                        }
 
+                        
 
                         if(i == Result.Lines.Length - 1 && activeFilter != otherFilter)
                         {

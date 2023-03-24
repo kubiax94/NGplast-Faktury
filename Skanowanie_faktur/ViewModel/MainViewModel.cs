@@ -39,7 +39,7 @@ namespace Skanowanie_faktur.ViewModel
             }
         }
 
-        public ObservableCollection<string> FileList { get; set; }
+        public ObservableCollection<InnvoiceOCRResult> FileList { get; set; }
 
         string _searchCrit;
         public string SearchCriteria {
@@ -57,23 +57,22 @@ namespace Skanowanie_faktur.ViewModel
         public MainViewModel()
         {
 
-            FileList = new ObservableCollection<string>();
+            FileList = new ObservableCollection<InnvoiceOCRResult>();
             filesReader = new FilesReaderService();
 
             FilePrefix = @"scan";
             FilePath = @"C:\Users\Kubiaxx\Documents\Programowanie\PRACA\Koszty Listopad";
 
             var test = filesReader.CreateFileList();
-
-            foreach (var file in test)
-            {
-                FileList.Add(file);
-                Console.WriteLine(file);
-            }
-
+            var input = new InnvoiceOCRInput(test);
             var b = new InnvoiceOCR();
+            
 
-            b.SearchForInnvoicesDetails(new InnvoiceOCRInput(test));
+            b.SearchForInnvoicesDetails(input);
+
+            FileList = new ObservableCollection<InnvoiceOCRResult>(input.InnvoiceOCRResults);
+            
+
         }
 
         public void OpenFileBrowser()
