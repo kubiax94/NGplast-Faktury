@@ -1,5 +1,6 @@
 ﻿using IronOcr;
 using IronSoftware.Drawing;
+using Services.FilesService;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using System;
@@ -20,6 +21,9 @@ namespace Services.OCRService
 
         string deflautFilter = @"[A-Z0-9]+\/+[A-Z0-9]+\/?[A-Z0-9]+\/?[A-Z0-9]+\w";
         string otherFilter = @"([A-Z]+[0-9]{5,9})\w+";
+
+
+        string nipFilter = @"(NIP[: -])\d+";
 
 
         public InnvoiceOCR() {
@@ -45,22 +49,33 @@ namespace Services.OCRService
                     
                     for (int i =0; i < Result.Lines.Length; i++)
                     {
-                        var filtred = GetInnvoiceInfo(Result.Lines[i], activeFilter);
+                        var fv_nr = GetInnvoiceInfo(Result.Lines[i], deflautFilter);
 
-                        if (filtred != null && filtred.Confidence > 80)
+
+                        if (file.Value.NIP == string.Empty) {
+                            var nip = GetInnvoiceInfo(Result.Lines[i], nipFilter);
+
+                            if (nip != null)
+                            {
+                                FilesReaderService.ContractorList.TryGetValue(file.Value.NIP, out var name);
+                                file.Value.ContractorName = name;
+                                file.Value.NIP = nip.Text;
+                            }
+                                
+                        }
+
+
+                        if (fv_nr != null && fv_nr.Confidence > 80)
                         {
                             file.Value.Found = true;
-                            file.Value.Acc = filtred.Confidence;
-                            file.Value.InnvoiceNumber = filtred.Text;
+                            file.Value.Acc = fv_nr.Confidence;
+                            file.Value.InnvoiceNumber = fv_nr.Text;
                             file.Value.OrginalFileName = Path.GetFileName(file.Key);
                             
                         }
                             
-
                         if(file.Value.Found)
                             break;
-
-                        
 
                         if(i == Result.Lines.Length - 1 && activeFilter != otherFilter)
                         {
@@ -71,15 +86,15 @@ namespace Services.OCRService
                 }
             }
         }
-        private static OcrResult.Word GetInnvoiceInfo(OcrResult.Line line, string filters)
+        private OcrResult.Word? GetInnvoiceInfo(OcrResult.Line line, string regex)
         {
 
-            if (Regex.IsMatch(line.Text, filters)) {
+            if (Regex.IsMatch(line.Text, regex)) {
 
 
                 foreach (var word in line.Words)
                 {
-                    if (Regex.IsMatch(word.Text, filters))
+                    if (Regex.IsMatch(word.Text, regex))
                         return word;
                 }
 
@@ -88,16 +103,14 @@ namespace Services.OCRService
             return null;
         }
 
-        private static string FindContractorName(IEnumerable<string> lines)
+        private string FindContractorName(OcrResult.Line line, string filter)
         {
-            foreach(var line in lines)
-            {
-                if(line.ToLower() == "NIP")
+
+                if(Regex.IsMatch(line.Text ,filter))
                 {
-                    var trim = line.Split(' ');
+                    var trim = line.Text.Split(' ');
                     return trim[trim.Length - 1];
                 }
-            }
 
             return string.Empty;
         }
@@ -146,7 +159,6 @@ namespace Services.OCRService
         public string OrginalFileName { get; set; } = string.Empty;
         public string NIP { get; set; } = string.Empty; 
         public double Acc { get; set; }
-
         public bool Found { get; set; } = false;
 
 

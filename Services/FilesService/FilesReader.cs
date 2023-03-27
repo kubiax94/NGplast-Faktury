@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft;
+using ExcelDataReader;
+using System.Data;
 
 namespace Services.FilesService
 {
@@ -14,6 +16,8 @@ namespace Services.FilesService
         public string SearchPrefix { get; set; }
         public string SearchLocation { get; set; }
         public List<string> AllSearchedFiles { get; }
+
+        public static Dictionary<string, string> ContractorList { get; } = new Dictionary<string, string>();
 
         public FilesReaderService() 
         {
@@ -52,9 +56,26 @@ namespace Services.FilesService
             return correctFiles;
         }
         
-        //public IEnumerable<object> ImportContractors(string filePath, )
-        //{
+        public void ImportContractors(string filePath)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var filestram = File.Open(filePath, FileMode.Open, FileAccess.Read);
+
+            string ext = Path.GetExtension(filePath);
+
+            var excelData = ExcelReaderFactory.CreateOpenXmlReader(filestram);
+            excelData.Read();
             
-        //}
+
+            do
+            {
+                while (excelData.Read()) {
+
+                    ContractorList.TryAdd(excelData.GetValue(0).ToString(), excelData.GetString(0));
+                }
+
+            } while(excelData.NextResult());
+           
+        }   
     }
 }

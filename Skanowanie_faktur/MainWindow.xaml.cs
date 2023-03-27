@@ -30,9 +30,13 @@ namespace Skanowanie_faktur
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
 
+            var pdfView = (WebBrowser)FindName("pdfView");
+
+            DataContext = new MainViewModel(pdfView);
+           
             
         }
+
     }
 }
