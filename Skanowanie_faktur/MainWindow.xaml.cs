@@ -38,5 +38,9 @@ namespace Skanowanie_faktur
             
         }
 
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

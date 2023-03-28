@@ -71,7 +71,7 @@ namespace Services.FilesService
             {
                 while (excelData.Read()) {
 
-                    ContractorList.TryAdd(excelData.GetValue(0).ToString(), excelData.GetString(0));
+                    ContractorList.TryAdd(excelData.GetValue(1).ToString(), excelData.GetString(0));
                 }
 
             } while(excelData.NextResult());

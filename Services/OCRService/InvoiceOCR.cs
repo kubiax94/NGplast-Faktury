@@ -18,13 +18,12 @@ namespace Services.OCRService
     {
 
         string activeFilter;
-
         string deflautFilter = @"[A-Z0-9]+\/+[A-Z0-9]+\/?[A-Z0-9]+\/?[A-Z0-9]+\w";
         string otherFilter = @"([A-Z]+[0-9]{5,9})\w+";
 
-
-        string nipFilter = @"(NIP[: -])\d+";
-
+        //@"(NIP+[: -]+?[ A-Z]{1,6}\d+)"
+        string nipFilter = @"(NIP)";
+        string blacklist = "6452536067";
 
         public InnvoiceOCR() {
 
@@ -34,38 +33,43 @@ namespace Services.OCRService
         {
 
             var Ocr = new IronTesseract();
-
+            Ocr.Configuration.TesseractVersion = TesseractVersion.Tesseract5; 
 
             foreach (var file in inputs)
             {
                 using (var Input = new OcrInput(file.Key))
                 {
                     activeFilter = deflautFilter;
-
+                    Input.DeNoise();
                     Input.Deskew();
                     var Result = Ocr.Read(Input);
                     
                     Console.WriteLine($"Dla pliku: { file.Key }");
-                    
+
+
+                    var inv_lines = Result.Lines.Where(x => x.Text.ToLower().Contains("faktura")).ToList();
+
+
                     for (int i =0; i < Result.Lines.Length; i++)
                     {
+
                         var fv_nr = GetInnvoiceInfo(Result.Lines[i], deflautFilter);
 
 
                         if (file.Value.NIP == string.Empty) {
-                            var nip = GetInnvoiceInfo(Result.Lines[i], nipFilter);
+                            var nip = FindContractorName(Result.Lines[i], nipFilter);
 
-                            if (nip != null)
+                            if (nip != string.Empty)
                             {
-                                FilesReaderService.ContractorList.TryGetValue(file.Value.NIP, out var name);
+                                FilesReaderService.ContractorList.TryGetValue(nip, out var name);
                                 file.Value.ContractorName = name;
-                                file.Value.NIP = nip.Text;
+                                file.Value.NIP = nip;
                             }
                                 
                         }
 
 
-                        if (fv_nr != null && fv_nr.Confidence > 80)
+                        if (fv_nr != null && fv_nr.Confidence > 80 && !file.Value.Found)
                         {
                             file.Value.Found = true;
                             file.Value.Acc = fv_nr.Confidence;
@@ -74,7 +78,7 @@ namespace Services.OCRService
                             
                         }
                             
-                        if(file.Value.Found)
+                        if(file.Value.Found && file.Value.NIP != string.Empty)
                             break;
 
                         if(i == Result.Lines.Length - 1 && activeFilter != otherFilter)
@@ -106,11 +110,20 @@ namespace Services.OCRService
         private string FindContractorName(OcrResult.Line line, string filter)
         {
 
-                if(Regex.IsMatch(line.Text ,filter))
+            if(Regex.IsMatch(line.Text ,filter))
+            {
+                string trim;
+                foreach (var word in line.Words)
                 {
-                    var trim = line.Text.Split(' ');
-                    return trim[trim.Length - 1];
+                    trim = Regex.Replace(word.Text, @"[-]", "");
+
+                    if (Regex.IsMatch(trim, @"[0-9]{9,14}\d+") && trim != blacklist)
+                    {
+                        return trim;
+                    }     
                 }
+  
+            }
 
             return string.Empty;
         }

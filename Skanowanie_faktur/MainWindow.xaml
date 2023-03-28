@@ -40,7 +40,7 @@
                                   SelectedItem="{Binding SelectedPDF}"
                                   AutoGenerateColumns="False"
                                   SelectionMode="Single"
-                                  CanUserAddRows="False">
+                                  CanUserAddRows="False" SelectionChanged="DataGrid_SelectionChanged">
                                     
                             <DataGrid.Columns >
                                 <DataGridTextColumn CanUserResize="False" Header="Nazwa kontrahęta" Binding="{Binding ContractorName}"></DataGridTextColumn>
