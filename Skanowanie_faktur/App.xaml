@@ -3,11 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Skanowanie_faktur"
              xmlns:vm="clr-namespace:Skanowanie_faktur.ViewModel"
-             StartupUri="MainWindow.xaml">
+             >
     <Application.Resources>
-        <DataTemplate DataType="{x:Type vm:MainViewModel}">
-            <local:MainWindow/>
-        </DataTemplate>     
+  
     </Application.Resources>
     
     

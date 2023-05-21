@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Services.FilesService;
 using Skanowanie_faktur.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,44 @@ namespace Skanowanie_faktur.Command
         public void Execute(object? parameter)
         {
             var obj = parameter as MainViewModel;
-                Console.WriteLine(obj.FilePath);
-                var test =  new WPFFolderBrowserDialog(); 
+
+            var test =  new WPFFolderBrowserDialog(); 
 
                 if (test.ShowDialog() == true)
                 {
                     obj.FilePath = test.FileName;
                 }
+        }
+    }
+
+
+    public class ImportContractorsCommand : ICommand
+    {
+
+        MainViewModel mainView;
+
+        public ImportContractorsCommand(MainViewModel mainViewModel)
+        {
+            mainView = mainViewModel;
+        }
+
+        public event EventHandler? CanExecuteChanged;
+
+
+
+        public bool CanExecute(object? parameter)
+        {
+            return mainView != null;
+        }
+
+        public void Execute(object? parameter)
+        {
+            var dialog = new OpenFileDialog();
+
+            dialog.Multiselect = false;
+            dialog.Title = "Wybierz plik";
+            dialog.Filter = "ExcelFormats *.*";
+
         }
     }
 }

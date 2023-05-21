@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Skanowanie_faktur.Controls.ScanSize"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Skanowanie_faktur.Controls"
+             mc:Ignorable="d">
+    <Grid x:Name="ScanArea">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Name="N" Grid.Row="0" Grid.Column="1" Background="Black"/>
+        <Border Name="W" Grid.Row="1" Grid.Column="0" Background="Black"/>
+        <Border Name="E" Grid.Row="1" Grid.Column="2" Background="Black"/>
+        <Border Name="S" Grid.Row="2" Grid.Column="1" Background="Black"/>
+
+        <Border Name="NW" Grid.Row="0" Grid.Column="0" Background="Black"/>
+        <Border Name="SW" Grid.Row="2" Grid.Column="0" Background="Black"/>
+        <Border Name="SE" Grid.Row="2" Grid.Column="2" Background="Black"/>
+        <Border Name="NE" Grid.Row="0" Grid.Column="2" Background="Black"/>
+
+        <Rectangle Grid.Column="1" Grid.Row="1" Fill="Wheat" Opacity="0.2"/>
+    </Grid>
+</UserControl>

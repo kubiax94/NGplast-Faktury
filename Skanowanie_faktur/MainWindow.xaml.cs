@@ -27,20 +27,25 @@ namespace Skanowanie_faktur
     {
        
 
-        public MainWindow()
+        public MainWindow(object mainView)
         {
             InitializeComponent();
 
-            var pdfView = (WebBrowser)FindName("pdfView");
+            DataContext = mainView;
 
-            DataContext = new MainViewModel(pdfView);
-           
-            
+
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var a = new TextBox();
+            
+        }
 
+        private void ComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            var a = sender as DataGrid;
+            Console.WriteLine(sender);
         }
     }
 }

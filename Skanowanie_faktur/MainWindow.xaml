@@ -4,6 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Skanowanie_faktur"
+        xmlns:myControls="clr-namespace:Skanowanie_faktur.Controls"
+        xmlns:vm="clr-namespace:Skanowanie_faktur.ViewModel"
+        xmlns:fs="clr-namespace:Services.FilesService;assembly=Services"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
 
@@ -16,12 +19,12 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="17*"/>
-                    <ColumnDefinition Width="380*"/>
-                    <ColumnDefinition Width="397*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <WrapPanel Grid.ColumnSpan="3"  VerticalAlignment="Center">
+                <WrapPanel Grid.ColumnSpan="3"  VerticalAlignment="Top" Margin="-10,10,10,0" >
 
                     <Label Margin="0 0 5 0">Scieżka do plików:</Label>
                     <TextBox Margin="0 0 5 0" 
@@ -31,21 +34,43 @@
                              MinWidth="200"/>
                     <Button  Content="Wybierz.." Height="20"/>
 
+                    <myControls:SuggestionBox/>
                     <ProgressBar></ProgressBar>
                 </WrapPanel>
                 
-                <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2">
+                <ScrollViewer Grid.Row="1" Grid.Column="1">
                     <StackPanel>
                         <DataGrid ItemsSource="{Binding FileList}" 
                                   SelectedItem="{Binding SelectedPDF}"
+                                  DataContext="{Binding .}"
                                   AutoGenerateColumns="False"
                                   SelectionMode="Single"
                                   CanUserAddRows="False" SelectionChanged="DataGrid_SelectionChanged">
-                                    
+
+
                             <DataGrid.Columns >
-                                <DataGridTextColumn CanUserResize="False" Header="Nazwa kontrahęta" Binding="{Binding ContractorName}"></DataGridTextColumn>
+                                
+                                <DataGridTemplateColumn Header="Nazwa Kontrahęta" >
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate >
+                                            <TextBlock KeyDown="ComboBox_KeyUp" Text="{Binding ContractorName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate >
+                                        <DataTemplate>
+                                            
+                                            <ComboBox  IsTextSearchEnabled="True" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Mode=Self}}" 
+                                                KeyUp="ComboBox_KeyUp" IsEditable="True" SelectedItem="{Binding ContractorName}" ItemsSource="{Binding GetContractorsNames}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                
                                 <DataGridTextColumn CanUserResize="False" Header="Nr. Faktury" Binding="{Binding InnvoiceNumber}"></DataGridTextColumn>
-                                <DataGridTextColumn CanUserResize="False" Header="NIP" Binding="{Binding NIP}"></DataGridTextColumn>
+                                <DataGridTextColumn CanUserResize="False" IsReadOnly="True" Header="NIP" Binding="{Binding NIP}"></DataGridTextColumn>
+
+
+                                    
+                                
                             </DataGrid.Columns>
                             
                             
@@ -53,8 +78,22 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <WebBrowser Grid.Row="1" Grid.Column="2" x:Name="pdfView"/>
+                <Grid Grid.Row="1" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
+                    <Image x:Name="pdfView" Panel.ZIndex="0" IsEnabled="False" IsManipulationEnabled="False"></Image>
+
+
+                    <myControls:ImageViewControler Result="{Binding SelectedPDF}"/>
+                    
+                    
+                </Grid>
+                
                 <Button Command="{Binding openDictionarySelection}" CommandParameter="{Binding .}"/>
             </Grid>
         </TabItem>
@@ -91,8 +130,6 @@
                      VerticalAlignment="Center"
                      MinWidth="200"/>
                 </WrapPanel>
-
-
 
             </Grid>
 
